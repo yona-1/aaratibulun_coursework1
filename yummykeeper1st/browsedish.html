@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Recipes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">🏠 Home</a> | <a href="login.html">🔑 Login</a> | <a href="signup.html">📝 Sign Up</a>
+    </nav>
+
+    <h2>🍽️ Browse Dishes</h2>
+    <div id="recipes-container"></div>
+
+    <script>
+        fetch('fetch_recipes.php')
+        .then(response => response.json())
+        .then(data => {
+            let container = document.getElementById('recipes-container');
+
+            if (data.error) {
+                container.innerHTML = `<p>${data.error}</p>`;
+                return;
+            }
+
+            data.forEach(recipe => {
+                let div = document.createElement('div');
+                div.classList.add('recipe-card');
+                div.innerHTML = `<h3>${recipe.name}</h3><p>${recipe.description}</p>`;
+                container.appendChild(div);
+            });
+        })
+        .catch(error => {
+            document.getElementById('recipes-container').innerHTML = "<p>Error loading recipes.</p>";
+            console.log('Error:', error);
+        });
+    </script>
+</body>
+</html>
